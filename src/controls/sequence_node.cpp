@@ -36,9 +36,12 @@ PortsList SequenceNode::providedPorts()
 
 NodeStatus SequenceNode::tick()
 {
-  if (getInput("start_idx", start_idx_) && current_child_idx_ <= start_idx_)
+  if (getInput("start_idx", start_idx_))
   {
-    current_child_idx_ = start_idx_;
+    if (current_child_idx_ <= start_idx_)
+    {
+      current_child_idx_ = start_idx_;
+    }
   }
 
   const size_t children_count = children_nodes_.size();
