@@ -15,14 +15,27 @@
 
 namespace BT
 {
-SequenceWithMemory::SequenceWithMemory(const std::string& name) :
-  ControlNode::ControlNode(name, {}), current_child_idx_(0)
+SequenceWithMemory::SequenceWithMemory(const std::string& name,
+                                       const BT::NodeConfig& config) :
+  ControlNode::ControlNode(name, config), current_child_idx_(0), start_idx_(0)
 {
   setRegistrationID("SequenceStar");
 }
 
+PortsList SequenceWithMemory::providedPorts()
+{
+  PortsList ports;
+  ports.insert(BT::InputPort<int>("start_idx"));
+  return ports;
+}
+
 NodeStatus SequenceWithMemory::tick()
 {
+  if (getInput("start_idx", start_idx_))
+  {
+    current_child_idx_ = start_idx_;
+  }
+
   const size_t children_count = children_nodes_.size();
 
   while (current_child_idx_ < children_count)
@@ -81,7 +94,7 @@ NodeStatus SequenceWithMemory::tick()
   if (current_child_idx_ == children_count)
   {
     resetChildren();
-    current_child_idx_ = 0;
+    current_child_idx_ = start_idx_;
   }
   // Skip if ALL the nodes have been skipped
   return status() == (NodeStatus::RUNNING) ? NodeStatus::SUCCESS : NodeStatus::SKIPPED;
@@ -89,7 +102,7 @@ NodeStatus SequenceWithMemory::tick()
 
 void SequenceWithMemory::halt()
 {
-  current_child_idx_ = 0;
+  current_child_idx_ = start_idx_;
   ControlNode::halt();
 }
 
