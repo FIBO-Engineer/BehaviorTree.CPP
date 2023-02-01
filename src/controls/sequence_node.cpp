@@ -36,7 +36,7 @@ PortsList SequenceNode::providedPorts()
 
 NodeStatus SequenceNode::tick()
 {
-  if (getInput("start_idx", start_idx_))
+  if (getInput("start_idx", start_idx_) && current_child_idx_ <= start_idx_)
   {
     current_child_idx_ = start_idx_;
   }
