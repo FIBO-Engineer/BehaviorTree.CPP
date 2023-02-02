@@ -16,10 +16,11 @@ namespace BT
 {
 NodeStatus ReactiveSequence::tick()
 {
-  size_t success_count = 0;
+  getInput("Start", start_idx_);
+  size_t success_count = start_idx_;
   size_t running_count = 0;
 
-  for (size_t index = 0; index < childrenCount(); index++)
+  for (size_t index = start_idx_; index < childrenCount(); index++)
   {
     TreeNode* current_child_node = children_nodes_[index];
     const NodeStatus child_status = current_child_node->executeTick();
@@ -70,6 +71,13 @@ NodeStatus ReactiveSequence::tick()
     return status() == (NodeStatus::RUNNING) ? NodeStatus::SUCCESS : NodeStatus::SKIPPED;
   }
   throw LogicError("ReactiveSequence is not supposed to reach this point");
+}
+
+PortsList ReactiveSequence::providedPorts()
+{
+  PortsList ports;
+  ports.insert(BT::InputPort<int>("Start"));
+  return ports;
 }
 
 }   // namespace BT

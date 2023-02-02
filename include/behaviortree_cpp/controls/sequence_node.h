@@ -33,14 +33,17 @@ namespace BT
 class SequenceNode : public ControlNode
 {
 public:
-  SequenceNode(const std::string& name);
+  SequenceNode(const std::string& name, const BT::NodeConfig& config);
 
   virtual ~SequenceNode() override = default;
+
+  static PortsList providedPorts();
 
   virtual void halt() override;
 
 private:
   size_t current_child_idx_;
+  size_t start_idx_;
 
   virtual BT::NodeStatus tick() override;
 };

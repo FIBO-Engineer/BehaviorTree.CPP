@@ -33,11 +33,15 @@ namespace BT
 class ReactiveSequence : public ControlNode
 {
 public:
-  ReactiveSequence(const std::string& name) : ControlNode(name, {})
+  ReactiveSequence(const std::string& name, const BT::NodeConfig& config) :
+    ControlNode(name, config), start_idx_(0)
   {}
+
+  static PortsList providedPorts();
 
 private:
   virtual BT::NodeStatus tick() override;
+  size_t start_idx_;
 };
 
 }   // namespace BT
