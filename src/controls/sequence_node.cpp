@@ -31,13 +31,13 @@ void SequenceNode::halt()
 PortsList SequenceNode::providedPorts()
 {
   PortsList ports;
-  ports.insert(BT::InputPort<int>("start_idx"));
+  ports.insert(BT::InputPort<int>("Start"));
   return ports;
 }
 
 NodeStatus SequenceNode::tick()
 {
-  if (getInput("start_idx", start_idx_) && current_child_idx_ < start_idx_)
+  if (getInput("Start", start_idx_) && current_child_idx_ < start_idx_)
   {
     current_child_idx_ = start_idx_;
   }

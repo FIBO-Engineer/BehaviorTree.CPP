@@ -25,18 +25,15 @@ SequenceWithMemory::SequenceWithMemory(const std::string& name,
 PortsList SequenceWithMemory::providedPorts()
 {
   PortsList ports;
-  ports.insert(BT::InputPort<int>("start_idx"));
+  ports.insert(BT::InputPort<int>("Start"));
   return ports;
 }
 
 NodeStatus SequenceWithMemory::tick()
 {
-  if (getInput("start_idx", start_idx_))
+  if (getInput("Start", start_idx_) && current_child_idx_ < start_idx_)
   {
-    if (current_child_idx_ <= start_idx_)
-    {
-      current_child_idx_ = start_idx_;
-    }
+    current_child_idx_ = start_idx_;
   }
 
   const size_t children_count = children_nodes_.size();
